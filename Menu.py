@@ -80,11 +80,14 @@ def abrir_tela_servicos():
     subprocess.run(["python", "cadastro-servico.py"])
 def abrir_tela_op():
     subprocess.run(["python", "operação-concluida.py"])
+def abrir_tela_crud():
+    subprocess.run(["python", "crud.py"])
                     
 opcoes_menu_gestao.add_command(label="Animais", command=abrir_tela_animais)
 opcoes_menu_gestao.add_command(label="Clientes", command=abrir_tela_clientes)
 opcoes_menu_gestao.add_command(label="Serviços", command=abrir_tela_servicos)
 opcoes_menu_gestao.add_command(label="Operação concluida" , command=abrir_tela_op)
+opcoes_menu_gestao.add_command(label="Cadastro de Promoções" , command=abrir_tela_crud)
 
 
 me.title("Pet shop Dogin's")

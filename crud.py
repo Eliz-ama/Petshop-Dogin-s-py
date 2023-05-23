@@ -1,3 +1,9 @@
+from tkinter import *
+from tkinter import messagebox
+from PIL import Image, ImageTk
+crud=Tk()
+import subprocess
+taskBarHeight = 40
 import mysql.connector
 
 # Conectando ao banco de dados
@@ -8,20 +14,22 @@ cnx = mysql.connector.connect(
     database='crud'
 )
 
-
 # Função para criar um registro
 def create_record(nome, email, cpf):
     cursor = cnx.cursor()
-    query = "INSERT INTO tabela (nome, email, cpf) VALUES (%nome, %email, %cpf)"
+    query = "INSERT INTO promocao (nome, email, cpf) VALUES (%s, %s, %s)"
     values = (nome, email, cpf)
     cursor.execute(query, values)
     cnx.commit()
-    cursor.close()
+    messagebox.showinfo("Sucesso", "Registro cadastrado com sucesso!")
+    cursor.close() 
+    
 
-    # Função para ler todos os registros
+
+# Função para ler todos os registros
 def read_records():
     cursor = cnx.cursor()
-    query = "SELECT * FROM tabela"
+    query = "SELECT * FROM promocao"
     cursor.execute(query)
     records = cursor.fetchall()
     cursor.close()
@@ -30,7 +38,7 @@ def read_records():
 # Função para ler todos os registros
 def read_records():
     cursor = cnx.cursor()
-    query = "SELECT * FROM tabela"
+    query = "SELECT * FROM promocao"
     cursor.execute(query)
     records = cursor.fetchall()
     cursor.close()
@@ -39,8 +47,8 @@ def read_records():
 # Função para atualizar um registro
 def update_record(record_id, nome, email, cpf):
     cursor = cnx.cursor()
-    query = "UPDATE tabela SET nome = %nome, email = %email, cpf = %cpf WHERE id = %s"
-    values = (name, email, record_id)
+    query = "UPDATE promocao SET nome = %nome, email = %email, cpf = %cpf WHERE id = %s"
+    values = (nome, email, record_id)
     cursor.execute(query, values)
     cnx.commit()
     cursor.close()
@@ -48,23 +56,16 @@ def update_record(record_id, nome, email, cpf):
 # Função para deletar um registro
 def delete_record(record_id):
     cursor = cnx.cursor()
-    query = "DELETE FROM tabela WHERE id = %s"
+    query = "DELETE FROM promocao WHERE id = %s"
     values = (record_id,)
     cursor.execute(query, values)
     cnx.commit()
     cursor.close()
 
 
-create_record("Isabelle", "isefshondo@gmail.com", "436.757.458-05"),
-("João" , "joaozinho@gmail.com", "123.098.345.57"),
-("Carol" , "carol@gmail.com", "193.567.395.09")
-
-
-from tkinter import*
-from PIL import Image, ImageTk
-crud=Tk()
-import subprocess
-taskBarHeight = 40
+# create_record("Isabelle", "isefshondo@gmail.com", "436.757.458-05"),
+# ("João" , "joaozinho@gmail.com", "123.098.345.57"),
+# ("Carol" , "carol@gmail.com", "193.567.395.09")
 
 #Configurações da tela
 crud.title("Acesso ao Petshop Dogin's")
@@ -93,23 +94,28 @@ logodog = Label(crud, image = logoDogins , bg="#fff")
 logodog.place(relx = .150, rely = .10, anchor = "n")
 
 #campo nome
-txt_nome = Label(crud,text="Nome" ,bg = "#FFF", font=("Helvetica 10"))
+txt_promo = Label(crud,text="Se cadastrando aqui, você receberá promoções exclusivas" ,bg = "#FFF", font=("Helvetica 15"))
+txt_promo.place(relx = .500, rely = .15, anchor = "n")
+
+#campo nome
+txt_nome = Label(crud,text="Nome" ,bg = "#FFF", font=("Helvetica 15"))
 txt_nome.place(relx = .500, rely = .30, anchor = "n")
-lbl_nome = Entry(crud).get()
-lbl_nome.place(relx = .560, rely = .33, anchor = "n" ,  width="190" , height="20")
+lbl_nome = Entry(crud)
+lbl_nome.place(relx = .500, rely = .34, anchor = "n" ,  width="190" , height="20")
 
 #campo email
-txt_email = Label(crud,text="Email" ,bg = "#FFF", font=("Helvetica 10"))
-txt_email.place(relx = .500, rely = .30, anchor = "n")
-lbl_email= Entry(crud).get()
-lbl_email.place(relx = .560, rely = .33, anchor = "n" ,  width="190" , height="20")
+txt_email = Label(crud,text="Email" ,bg = "#FFF", font=("Helvetica 15"))
+txt_email.place(relx = .500, rely = .44, anchor = "n")
+lbl_email= Entry(crud)
+lbl_email.place(relx = .500, rely = .48, anchor = "n" ,  width="190" , height="20")
 
 #campo cpf
-txt_cpf = Label(crud,text="cpf" ,bg = "#FFF", font=("Helvetica 10"))
-txt_cpf.place(relx = .500, rely = .30, anchor = "n")
-lbl_cpf = Entry(crud).get()
-lbl_cpf.place(relx = .560, rely = .33, anchor = "n" ,  width="190" , height="20")
+txt_cpf = Label(crud,text="CPF" ,bg = "#FFF", font=("Helvetica 15"))
+txt_cpf.place(relx = .500, rely = .60, anchor = "n")
+lbl_cpf = Entry(crud)
+lbl_cpf.place(relx = .500, rely = .64, anchor = "n" ,  width="190" , height="20")
 
-botao = Button(crud, text="Enviar", command=lambda:create_record(lbl_nome, lbl_email, lbl_cpf))
+botao = Button(crud, text="Enviar", command=lambda:create_record(lbl_nome.get(), lbl_email.get(), lbl_cpf.get()))
+botao.place(relx=.500, rely=.8, anchor="n",  width="100" , height="25")
 
 crud.mainloop()
