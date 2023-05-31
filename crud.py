@@ -62,6 +62,7 @@ def update_record(nome, email, cpf):
     query = "UPDATE promocao SET nome = %s, email = %s WHERE cpf = %s"
     values = (nome, email, cpf)
     cursor.execute(query, values)
+    messagebox.showinfo("Sucesso", "Registro atualizado com sucesso!")
     cnx.commit()
     cursor.close()
 
@@ -71,6 +72,7 @@ def delete_record(cpf):
     query = "DELETE FROM promocao WHERE cpf = %s"
     values = (cpf)
     cursor.execute(query, values)
+    messagebox.showinfo("Sucesso", "Registro deletado!")
     cnx.commit()
     cursor.close()
 
