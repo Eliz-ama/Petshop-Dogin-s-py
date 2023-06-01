@@ -1,8 +1,8 @@
 from tkinter import *
-from tkinter import messagebox
 from PIL import Image, ImageTk
 import subprocess
-import mysql.connector
+import tkinter.messagebox as MessageBox
+import mysql.connector as mysql
 
 crud=Tk()
 
@@ -26,96 +26,93 @@ crud.minsize(width, height)
 crud.geometry("%dx%d+%d+%d" % (width, height, posx, posy))
 crud.configure(bg='#fff')
 
-# lbl_id = Entry(crud)
-# lbl_id.place(relx=.300, rely=.8, anchor="n", width="100", height="25")
-
-# Conectando ao banco de dados
-cnx = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database='crud'
-)
-
-# Função para criar um registro
-def create_record(nome, email, cpf):
-    cursor = cnx.cursor()
-    query = "INSERT INTO promocao (nome, email, cpf) VALUES (%s, %s, %s)"
-    values = (nome, email, cpf)
-    cursor.execute(query, values)
-    cnx.commit()
-    messagebox.showinfo("Sucesso", "Registro cadastrado com sucesso!")
-    cursor.close() 
-
-# Função para ler todos os registros
-def read_records():
-    cursor = cnx.cursor()
-    query = "SELECT * FROM promocao"
-    cursor.execute(query)
-    records = cursor.fetchall()
-    cursor.close()
-    return records
-
-# Função para atualizar um registro
-def update_record(nome, email, cpf):
-    cursor = cnx.cursor()
-    query = "UPDATE promocao SET nome = %s, email = %s WHERE cpf = %s"
-    values = (nome, email, cpf)
-    cursor.execute(query, values)
-    messagebox.showinfo("Sucesso", "Registro atualizado com sucesso!")
-    cnx.commit()
-    cursor.close()
-
-# Função para deletar um registro
-def delete_record(cpf):
-    cursor = cnx.cursor()
-    query = "DELETE FROM promocao WHERE cpf = %s"
-    values = (cpf)
-    cursor.execute(query, values)
-    messagebox.showinfo("Sucesso", "Registro deletado!")
-    cnx.commit()
-    cursor.close()
-
-#Estilização do Logo
 logodoginsorigin = Image.open("images/mainLogo.png")
 logoresize = logodoginsorigin.resize((140, 50))
 logoDogins = ImageTk.PhotoImage(logoresize)
 logodog = Label(crud, image = logoDogins , bg="#fff")
 logodog.place(relx = .150, rely = .10, anchor = "n")
 
-#campo nome
-txt_promo = Label(crud,text="Se cadastrando aqui, você receberá promoções exclusivas" ,bg = "#FFF", font=("Helvetica 15"))
-txt_promo.place(relx = .500, rely = .15, anchor = "n")
+lbl_nome = Label(crud, text="Nome", font=("Arial 12"))
+lbl_nome.place(relx=0.37,rely=0.3)
+txt_nome= Entry(crud, font=("Aial 12"))
+txt_nome.place(relx=0.43 , rely=0.3)
 
-#campo nome
-txt_nome = Label(crud,text="Nome" ,bg = "#FFF", font=("Helvetica 15"))
-txt_nome.place(relx = .500, rely = .30 , anchor = "n")
-lbl_nome = Entry(crud)
-lbl_nome.place(relx = .500, rely = .34, anchor = "n" ,  width="190" , height="20")
 
-#campo email
-txt_email = Label(crud,text="Email" ,bg = "#FFF", font=("Helvetica 15"))
-txt_email.place(relx = .500, rely = .44, anchor = "n")
-lbl_email= Entry(crud)
-lbl_email.place(relx = .500, rely = .48, anchor = "n" ,  width="190" , height="20")
+lbl_cpf=Label(crud,text="CPF:", font=("Arial 12"))
+lbl_cpf.place(relx=0.37,rely=0.4)
+txt_cpf=Entry(crud, font=("Arial 12"))
+txt_cpf.place(relx=0.43, rely=0.4)
 
-#campo cpf
-txt_cpf = Label(crud,text="CPF" ,bg = "#FFF", font=("Helvetica 15"))
-txt_cpf.place(relx = .500, rely = .60, anchor = "n")
-lbl_cpf = Entry(crud)
-lbl_cpf.place(relx = .500, rely = .64, anchor = "n" ,  width="190" , height="20")
 
-botao = Button(crud, text="Enviar", command=lambda:create_record(lbl_nome.get(), lbl_email.get(), lbl_cpf.get()))
-botao.place(relx=.400, rely=.8, anchor="n",  width="100" , height="25")
+lbl_email=Label(crud,text="E-mail:", font=("Arial 12"))
+lbl_email.place(relx=0.37,rely=0.5)
+txt_email = Entry(crud, font=("Arial 12"))
+txt_email.place(relx=0.43,rely=0.5)
 
-botaoAtualizar = Button(crud, text="Atualizar", command=lambda:update_record(lbl_nome.get(), lbl_email.get(), lbl_cpf.get()))
-botaoAtualizar.place(relx=.500, rely=.8, anchor="n", width="100", height="25")
 
-botaoExcluir = Button(crud, text="Excluir", command=lambda:delete_record(lbl_cpf.get()))
-botaoExcluir.place(relx=.600, rely=.8, anchor="n", width="100", height="25")
+def salvar():
+    variavel_nome= txt_nome.get()
+    variavel_cpf = txt_cpf.get()
+    variavel_email = txt_email.get()
 
-botaoVisualizar = Button(crud, text="Visualizar", command=read_records)
-botaoVisualizar.place(relx=.700, rely=.8, anchor="n", width="100", height="25")
+    if(variavel_nome == "" or variavel_cpf == "" or variavel_email==""):
+        MessageBox.showinfo("Erro","Há campos em branco")
+    else:
 
+        conectar = mysql.connect(host="localhost",user="root",password="", database="crud")
+        cursor = conectar.cursor()
+        cursor.execute("insert into promocao values('"+ variavel_nome + "','"+ variavel_email + "','"+ variavel_cpf + "')")
+        cursor.execute("commit")
+        MessageBox.showinfo("Mensagem","Cadastro realizado com sucesso")
+        conectar.close()
+
+def excluir():
+    if(txt_nome.get() == ""):
+        MessageBox.showinfo("ALERT" , "Digite o código para deletar")
+    else:
+        conectar= mysql.connect(host="localhost", user="root",password="", database="crud")
+        cursor = conectar.cursor()
+        cursor.execute("delete from promocao where cpf='"+txt_cpf.get() + "'")
+        cursor.execute("commit")
+        MessageBox.showinfo("Mensagem", "Informação excluída com sucesso")
+        crud.close()
+
+def atualizar():
+    id = txt_nome.get()
+    name = txt_nome.get()
+    cpf = txt_cpf.get()
+    if(name == "" or cpf == ""):
+        MessageBox.showinfo("ALERT" , "Digite todos os campos para realizar alteração")
+    else:
+        conectar = mysql.connect(host="localhost", user="root",password="", database="crud")
+        cursor = conectar.cursor()
+        cursor.execute("Update promocao set nome = '"+ txt_nome.get() +"', email='"+ txt_email.get() + "'where cpf = '"+ txt_cpf.get()+"'")
+        cursor.execute("commit");
+        MessageBox.showinfo("status","Successfully Update")
+        conectar.close()
+
+def Select():
+    if(txt_cpf.get() == ""):
+        MessageBox.showinfo("ALERT","Por favor digite o código")
+    else:
+        conectar = mysql.connect(host="localhost",user="root", password="",database="crud")
+        cursor = conectar.cursor()
+        cursor.execute("select * from promocao where cpf= '" + txt_cpf.get()+"'")
+        rows = cursor.fetchall()
+        for row in rows:
+            txt_nome.insert(0, row[0])
+            txt_email.insert(0, row[1])
+        conectar.close()
+
+btn_salvar = Button(crud, text="Salvar", command=salvar, font=("Arial 12")).place(relx=0.3,rely=0.65)
+btn_excluir = Button(crud, text="Apagar", command=excluir, font=("Arial 12")).place(relx=0.4, rely=0.65)
+btn_update = Button(crud, text="Update", command=atualizar, font=("Arial 12")).place(relx=0.5, rely=0.65)
+btn_consultar = Button(crud, text="Consultar", command=Select, font=("Arial 12")).place(relx=0.6, rely=0.65)
+
+#usuarioorigin = Image.open("images/mainLogo.png")
+#usuresize = usuarioorigin.resize((140, 50))
+#logo = ImageTk.PhotoImage(usuresize)
+#logu = Label(crud, image = logo , bg="#fff")
+#logu.place(relx = .150, rely = .10, anchor = "n")
 
 crud.mainloop()
