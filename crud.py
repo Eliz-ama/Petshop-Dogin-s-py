@@ -38,19 +38,19 @@ logodog.place(relx = .150, rely = .10, anchor = "n")
 
 lbl_nome = Label(crud, text="Nome", font=("Arial 12"))
 lbl_nome.place(relx=0.37,rely=0.3)
-txt_nome= Entry(crud, font=("Aial 12"))
+txt_nome= Entry(crud, font=("Aial 12"),backgroud="#FFF")
 txt_nome.place(relx=0.43 , rely=0.3)
 
 
 lbl_cpf=Label(crud,text="CPF:", font=("Arial 12"))
 lbl_cpf.place(relx=0.37,rely=0.4)
-txt_cpf=Entry(crud, font=("Arial 12"))
+txt_cpf=Entry(crud, font=("Arial 12") , backgroud="#FFF")
 txt_cpf.place(relx=0.43, rely=0.4)
 
 
 lbl_email=Label(crud,text="E-mail:", font=("Arial 12"))
 lbl_email.place(relx=0.37,rely=0.5)
-txt_email = Entry(crud, font=("Arial 12"))
+txt_email = Entry(crud, font=("Arial 12"), backgroud="#FFF")
 txt_email.place(relx=0.43,rely=0.5)
 
 
@@ -113,12 +113,6 @@ btn_salvar = Button(crud, text="Salvar", command=salvar, font=("Arial 12")).plac
 btn_excluir = Button(crud, text="Apagar", command=excluir, font=("Arial 12")).place(relx=0.4, rely=0.65)
 btn_update = Button(crud, text="Update", command=atualizar, font=("Arial 12")).place(relx=0.5, rely=0.65)
 btn_consultar = Button(crud, text="Consultar", command=Select, font=("Arial 12")).place(relx=0.6, rely=0.65)
-
-#usuarioorigin = Image.open("images/mainLogo.png")
-#usuresize = usuarioorigin.resize((140, 50))
-#logo = ImageTk.PhotoImage(usuresize)
-#logu = Label(crud, image = logo , bg="#fff")
-#logu.place(relx = .150, rely = .10, anchor = "n")
 
 
 def Simples(rotacao_image, angulo):
