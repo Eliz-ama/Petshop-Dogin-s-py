@@ -1,6 +1,8 @@
 from tkinter import*
+
 from PIL import Image, ImageTk
 OC=Tk()
+
 import subprocess
 
 taskBarHeight = 40
