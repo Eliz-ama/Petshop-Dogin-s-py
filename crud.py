@@ -7,7 +7,6 @@ import cv2
 import numpy as np
 import tkinter as tk
 
-
 crud=Tk()
 
 #Configurações da tela
@@ -38,21 +37,18 @@ logodog.place(relx = .150, rely = .10, anchor = "n")
 
 lbl_nome = Label(crud, text="Nome", font=("Arial 12"))
 lbl_nome.place(relx=0.37,rely=0.3)
-txt_nome= Entry(crud, font=("Aial 12"),backgroud="#FFF")
+txt_nome= Entry(crud, font=("Aial 12"))
 txt_nome.place(relx=0.43 , rely=0.3)
-
 
 lbl_cpf=Label(crud,text="CPF:", font=("Arial 12"))
 lbl_cpf.place(relx=0.37,rely=0.4)
-txt_cpf=Entry(crud, font=("Arial 12") , backgroud="#FFF")
+txt_cpf=Entry(crud, font=("Arial 12"))
 txt_cpf.place(relx=0.43, rely=0.4)
-
 
 lbl_email=Label(crud,text="E-mail:", font=("Arial 12"))
 lbl_email.place(relx=0.37,rely=0.5)
-txt_email = Entry(crud, font=("Arial 12"), backgroud="#FFF")
+txt_email = Entry(crud, font=("Arial 12"))
 txt_email.place(relx=0.43,rely=0.5)
-
 
 def salvar():
     variavel_nome= txt_nome.get()
@@ -107,60 +103,17 @@ def Select():
             txt_nome.insert(0, row[0])
             txt_email.insert(0, row[1])
         conectar.close()
-txt_mensagem = Text(crud, text="Faça seu cadastro para receber promoções exclusivas",font=("Arial 18")).place(relx=0.5,rely=0.2)
+txt_mensagem = Label(crud, text="Faça seu cadastro para receber promoções exclusivas",font=("Arial 18"))
+txt_mensagem.place(relx=0.25,rely=0.2)
 
-btn_salvar = Button(crud, text="Salvar", command=salvar, font=("Arial 12")).place(relx=0.3,rely=0.65)
-btn_excluir = Button(crud, text="Apagar", command=excluir, font=("Arial 12")).place(relx=0.4, rely=0.65)
-btn_update = Button(crud, text="Update", command=atualizar, font=("Arial 12")).place(relx=0.5, rely=0.65)
-btn_consultar = Button(crud, text="Consultar", command=Select, font=("Arial 12")).place(relx=0.6, rely=0.65)
+btn_salvar = Button(crud, text="Salvar", command=salvar, font="Arial 12",  bg = "#85d3ff").place(relx=0.26,rely=0.7)
+btn_excluir = Button(crud, text="Apagar", command=excluir, font="Arial 12", bg = "#85d3ff").place(relx=0.36, rely=0.7)
+btn_update = Button(crud, text="Update", command=atualizar, font="Arial 12",bg = "#85d3ff").place(relx=0.46, rely=0.7)
+btn_consultar = Button(crud, text="Consultar", command=Select, font="Arial 12",bg = "#85d3ff").place(relx=0.56, rely=0.7)
+btn_img = Button(crud, text="Selecione uma imagem", command=lambda:abrir_tela_rotate(), font="Arial 12",bg = "#85d3ff").place(relx=0.66, rely=0.7)
 
-
-def Simples(rotacao_image, angulo):
-    altura, largura = rotacao_image.shape[0], rotacao_image.shape[1]
-    y, x = altura / 2, largura / 2
-    rotacao_matriz = cv2.getRotationMatrix2D((x, y), angulo, 1.0)
-    rotacionando_image = cv2.warpAffine(rotacao_image, rotacao_matriz, (largura, altura))
-    return rotacionando_image
-
-def complexo(rotacao_image, angulo):
-    altura, largura = rotacao_image.shape[0], rotacao_image.shape[1]
-    x, y = altura / 2, largura / 2
-    rotacao_matriz = cv2.getRotationMatrix2D((y, x), angulo, 1.0)
-    coseno = np.abs(rotacao_matriz[0][0])
-    seno = np.abs(rotacao_matriz[0][1])
-    nova_altura = int((altura * seno) + largura * coseno)
-    nova_largura = int((altura * coseno) + largura * seno)
-
-    rotacao_matriz[0][2] += (nova_largura / 2) - x
-    rotacao_matriz[1][2] += (nova_altura / 2) - y
-
-    rotacionando_image = cv2.warpAffine(rotacao_image, rotacao_matriz, (nova_largura, nova_altura))
-    return rotacionando_image
-
-# Carregar a imagem
-imagem_usuario = cv2.imread("usuario.png", 1)
-
-# Realizar as rotações
-Normal = Simples(imagem_usuario, 40)
-Rotacao_Detalhada = complexo(imagem_usuario, 40)
-
-
-# Converter as imagens para o formato suportado pelo Tkinter
-imagem_normal = ImageTk.PhotoImage(Image.fromarray(cv2.cvtColor(imagem_usuario, cv2.COLOR_BGR2RGB)))
-imagem_rotacao_simples = ImageTk.PhotoImage(Image.fromarray(cv2.cvtColor(Normal, cv2.COLOR_BGR2RGB)))
-imagem_rotacao_detalhada = ImageTk.PhotoImage(Image.fromarray(cv2.cvtColor(Rotacao_Detalhada, cv2.COLOR_BGR2RGB)))
-
-# Exibir as imagens em labels
-lbl_imagem_normal = tk.Label(crud, image=imagem_normal)
-lbl_imagem_normal.pack()
-
-lbl_imagem_rotacao_simples = tk.Label(crud, image=imagem_rotacao_simples)
-lbl_imagem_rotacao_simples.pack()
-
-lbl_imagem_rotacao_detalhada = tk.Label(crud, image=imagem_rotacao_detalhada)
-lbl_imagem_rotacao_detalhada.pack()
+def abrir_tela_rotate():
+    subprocess.run(["python", "rotateImg.py"])
 
 # Executar a interface gráfica Tkinter
 crud.mainloop()
-
-
